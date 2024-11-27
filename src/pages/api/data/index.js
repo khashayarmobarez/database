@@ -1,3 +1,6 @@
+// mongodb+srv://khashayarmobarez333:AlAOnlZlSfE3Gx8Q@firstcluster.3gfvw.mongodb.net/?retryWrites=true&w=majority&appName=firstCluster
+const mongoose = require("mongoose")
+
 export default function handler(req, res) {
     if (req.method === "POST") {
       const { name } = req.body; // Use req.body for POST requests
@@ -15,6 +18,12 @@ export default function handler(req, res) {
         res.status(422).json({ message: 'Invalid name' });
         return;
       }
+
+      // connect to db
+      mongoose.connect('// mongodb+srv://khashayarmobarez333:AlAOnlZlSfE3Gx8Q@firstcluster.3gfvw.mongodb.net/?retryWrites=true&w=majority&appName=firstCluster',
+        () => console.log('conntected to db')
+      )
+
   
       res.status(200).json({ message: 'Name received', name });
     } else {
