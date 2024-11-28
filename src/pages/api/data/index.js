@@ -4,7 +4,7 @@ import connectDB from "@/utils/connectDB";
 const mongoose = require("mongoose")
 
 export default async function handler(req, res) {
-    await connectDB;
+    await connectDB();
     if (req.method === "POST") {
       const { name } = req.body; // Use req.body for POST requests
   
