@@ -17,10 +17,6 @@ export default async function handler(req, res) {
     } else if (req.method === "GET") {
       const { name } = req.query; // Use req.query for GET requests
 
-      // MONGO_USER=khashayarmobarez333
-      // MONGO_PASS=AlAOnlZlSfE3Gx8Q
-      // MONGO_URI= mongodb+srv://${MONGO_USER}:${MONGO_PASS}@firstcluster.3gfvw.mongodb.net/?retryWrites=true&w=majority&appName=firstCluster
-  
       if (!name || name.length <= 3) {
         res.status(422).json({ message: 'Invalid name' });
         return;
