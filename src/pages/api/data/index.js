@@ -22,11 +22,6 @@ export default async function handler(req, res) {
         return;
       }
 
-      // connect to db
-      mongoose.connect('mongodb+srv://khashayarmobarez333:AlAOnlZlSfE3Gx8Q@firstcluster.3gfvw.mongodb.net/?retryWrites=true&w=majority&appName=firstCluster',
-        () => console.log('conntected to db')
-      )
-
   
       res.status(200).json({ message: 'Name received', name });
     } else {
