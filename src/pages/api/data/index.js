@@ -14,14 +14,14 @@ export default async function handler(req, res) {
 
   switch (method) {
     case "POST": {
-      const { name } = body;
+      const { name, age, email } = body;
 
       if (!name || name.length <= 3) {
         return res.status(422).json({ message: "Invalid name" });
       }
 
       try {
-        const user = await User.create({ name });
+        const user = await User.create({ name, age, email, courses: ['next, react'] });
         return res.status(201).json({ message: "User created successfully", user });
       } catch (error) {
         return res.status(500).json({ message: "Failed to create user", error: error.message });
