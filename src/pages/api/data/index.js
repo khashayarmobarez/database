@@ -1,35 +1,45 @@
 import connectDB from "@/utils/connectDB";
-
-// mongodb+srv://khashayarmobarez333:AlAOnlZlSfE3Gx8Q@firstcluster.3gfvw.mongodb.net/?retryWrites=true&w=majority&appName=firstCluster
-const mongoose = require("mongoose")
+import User from "../../../../models/User";
 
 export default async function handler(req, res) {
-    await connectDB();
-    if (req.method === "POST") {
-      const { name } = req.body; // Use req.body for POST requests
-  
-      if (!name || name.length <= 3) {
-        res.status(422).json({ message: 'Invalid name' });
-        return;
-      }
-  
-      res.status(200).json({ message: 'Name received', name });
-    } else if (req.method === "GET") {
-      const { name } = req.query; // Use req.query for GET requests
+
+  try {
+    await connectDB(); // Connect to the database
+  } catch(err) {
+    console.log(err)
+    res.status(500).json({status:'failed', message: "error in connecting to database"})
+  }
+
+  const { method, body, query } = req;
+
+  switch (method) {
+    case "POST": {
+      const { name } = body;
 
       if (!name || name.length <= 3) {
-        res.status(422).json({ message: 'Invalid name' });
-        return;
+        return res.status(422).json({ message: "Invalid name" });
       }
 
-      res.status(200).json({ message: 'Name received', name });
-    } else {
-      // Handle unsupported methods
-      res.setHeader("Allow", ["GET", "POST"]);
-      res.status(405).end(`Method ${req.method} Not Allowed`);
+      try {
+        const user = await User.create({ name });
+        return res.status(201).json({ message: "User created successfully", user });
+      } catch (error) {
+        return res.status(500).json({ message: "Failed to create user", error: error.message });
+      }
     }
+
+    case "GET": {
+      const { name } = query;
+
+      if (!name || name.length <= 3) {
+        return res.status(422).json({ message: "Invalid name" });
+      }
+
+      return res.status(200).json({ message: "Name received", name });
+    }
+
+    default:
+      res.setHeader("Allow", ["GET", "POST"]);
+      return res.status(405).json({ message: `Method ${method} Not Allowed` });
+  }
 }
-
-
-
-  
