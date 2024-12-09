@@ -8,6 +8,7 @@ export default async function handler(req, res) {
   } catch(err) {
     console.log(err)
     res.status(500).json({status:'failed', message: "error in connecting to database"})
+    return;
   }
 
   const { method, body, query } = req;
@@ -29,8 +30,13 @@ export default async function handler(req, res) {
     }
 
     case "GET": {
-      const users = await User.find()
-      console.log(users)
+      try {
+        const users = await User.find()
+        return res.status(200).json({ message: "Users fetched successfully", users });
+        console.log(users)
+      } catch(err) {
+        return res.status(500).json({ message: "Failed to fetch users", error: err.message });
+      }
     }
 
     default:

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import localFont from "next/font/local";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -19,6 +19,15 @@ export default function Home() {
   const [age, setAge] = useState('')
   const [email, setEmail] = useState('')
 
+  const [users, setUsers] = useState([])
+
+  useEffect(() => {
+    fetch('/api/data')
+    .then((res) => res.json())
+    .then((data) => setUsers(data.users))
+    console.log(users)
+  },[])
+
   const postHandler = async () => {
     const res = await fetch('/api/data', {
       method: 'POST',
@@ -36,18 +45,27 @@ export default function Home() {
   }
 
   return (
-    <div className={`${geistSans.variable} ${geistMono.variable}`}>
-      <h3>connecting data base to nextjs project!</h3>
-      <div>
-        <input type="text" placeholder="Your Name" value={name} onChange={(e) => setName(e.target.value)} />
+    <div className={'w-full flex flex-col items-center'}>
+      <div className={`${geistSans.variable} ${geistMono.variable}`}>
+        <h3>connecting data base to nextjs project!</h3>
+        <div>
+          <input type="text" placeholder="Your Name" value={name} onChange={(e) => setName(e.target.value)} />
+        </div>
+        <div>
+          <input type="number" placeholder="Your age" value={age} onChange={(e) => setAge(e.target.value)} />
+        </div>
+        <div>
+          <input type="text" placeholder="Your email" value={email} onChange={(e) => setEmail(e.target.value)} />
+        </div>
+        <button onClick={postHandler}>post</button>
       </div>
-      <div>
-        <input type="number" placeholder="Your age" value={age} onChange={(e) => setAge(e.target.value)} />
-      </div>
-      <div>
-        <input type="text" placeholder="Your email" value={email} onChange={(e) => setEmail(e.target.value)} />
-      </div>
-      <button onClick={postHandler}>post</button>
+      <ul>
+        {
+          users?.map(user => 
+            <li key={user.id}>{user.name}</li>
+          )
+        }
+      </ul>
     </div>
   );
 }
