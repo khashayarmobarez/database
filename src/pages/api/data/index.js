@@ -29,13 +29,8 @@ export default async function handler(req, res) {
     }
 
     case "GET": {
-      const { name } = query;
-
-      if (!name || name.length <= 3) {
-        return res.status(422).json({ message: "Invalid name" });
-      }
-
-      return res.status(200).json({ message: "Name received", name });
+      const users = await User.find()
+      console.log(users)
     }
 
     default:
