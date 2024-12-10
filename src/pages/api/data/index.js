@@ -1,15 +1,9 @@
 import connectDB from "@/utils/connectDB";
 import User from "../../../../models/User";
+import withDatabase from "@/utils/withDatabaseConnection";
 
-export default async function handler(req, res) {
+async function handler(req, res) {
 
-  try {
-    await connectDB(); // Connect to the database
-  } catch(err) {
-    console.log(err)
-    res.status(500).json({status:'failed', message: "error in connecting to database"})
-    return;
-  }
 
   const { method, body, query } = req;
 
@@ -44,3 +38,6 @@ export default async function handler(req, res) {
       return res.status(405).json({ message: `Method ${method} Not Allowed` });
   }
 }
+
+
+export default withDatabase(handler)

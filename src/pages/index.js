@@ -25,7 +25,7 @@ export default function Home() {
     fetch('/api/data')
     .then((res) => res.json())
     .then((data) => setUsers(data.users))
-    console.log(users)
+    users && console.log(users)
   },[])
 
   const postHandler = async () => {
@@ -42,6 +42,12 @@ export default function Home() {
     })
     const data = await res.json()
     console.log(data); 
+  }
+
+  const handleDetails = (id) => {
+    fetch(`api/data/${id}`)
+    .then(res => res.json())
+    .then(data => console.log(data))
   }
 
   return (
@@ -62,7 +68,14 @@ export default function Home() {
       <ul>
         {
           users?.map(user => 
-            <li key={user.id}>{user.name}</li>
+            <li key={user._id} className="flex flex-col">
+              <p>
+              {user.name}
+              </p>
+              <button onClick={() => handleDetails(user._id)}>
+                see details
+              </button>
+            </li>
           )
         }
       </ul>
