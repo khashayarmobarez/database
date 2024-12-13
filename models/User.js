@@ -8,8 +8,8 @@ const  userSchema = new Schema({
     },
     age: {
         type: Number,
-        min: 10,
-        max: 65
+        min: 0,
+        max: 1000
     },
     email: {
         type: String,
@@ -19,7 +19,7 @@ const  userSchema = new Schema({
     createdAt: {
         type: Date,
         // as a function so it gets the correct now time everytime
-        default: () => Date.now
+        default: () => Date.now()
     }
 
 })

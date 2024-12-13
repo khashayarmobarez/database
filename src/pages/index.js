@@ -18,6 +18,9 @@ export default function Home() {
   const [name, setName] = useState('')
   const [age, setAge] = useState('')
   const [email, setEmail] = useState('')
+  
+  const [newEmail, setNewEmail] = useState('')
+  const [edit, setEdit] = useState('')
 
   const [users, setUsers] = useState([])
 
@@ -25,7 +28,6 @@ export default function Home() {
     fetch('/api/data')
     .then((res) => res.json())
     .then((data) => setUsers(data.users))
-    users && console.log(users)
   },[])
 
   const postHandler = async () => {
@@ -48,6 +50,23 @@ export default function Home() {
     fetch(`api/data/${id}`)
     .then(res => res.json())
     .then(data => console.log(data))
+  }
+
+  const editHandler = (user) => {
+    setEdit(user._id)
+    setNewEmail(user.email)
+  }
+
+  const submitEditHandler = async (id) => {
+    const res = await fetch(`api/data/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify({newEmail}),
+      headers: {"Content-Type": "application/json"}
+    });
+
+    const data = await res.json()
+    setEdit('')
+    console.log(data)
   }
 
   return (
@@ -73,8 +92,18 @@ export default function Home() {
               {user.name}
               </p>
               <button onClick={() => handleDetails(user._id)}>
-                see details
+                log details
               </button>
+              <button onClick={() => editHandler(user)}>
+                edit user data
+              </button>
+              {
+                edit && edit === user._id &&
+                <div>
+                  <input value={newEmail || ''} onChange={e => setNewEmail(e.target.value)} />
+                  <button onClick={() => submitEditHandler(user._id)}>save</button>
+                </div>
+              }
             </li>
           )
         }

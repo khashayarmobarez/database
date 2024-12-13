@@ -31,6 +31,19 @@ async function handler(req, res) {
             return res.status(500).json({ message: "Failed to fetch users", error: err.message });
         }
 
+    } else if (req.method === 'PATCH') {
+        try {
+
+            const userData = await User.findById(id)
+            userData.email = req.body.newEmail
+            await userData.save();
+            res.status(200).json({status: 'success', data: userData})
+
+        } catch(err) {
+
+            return res.status(500).json({ message: "error in updating user", error: err });
+
+        }
     }
 }
 
